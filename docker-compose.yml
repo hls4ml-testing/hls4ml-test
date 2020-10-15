@@ -1,0 +1,15 @@
+version: "3"
+services:
+  hls4ml:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: hls4ml
+    volumes:
+      - ./:/code/
+    ports:
+      - 9090:9090
+    working_dir: /code
+    command: jupyter-lab --ip=0.0.0.0  --allow-root --port=9090
+    tty: true
+    stdin_open: true
