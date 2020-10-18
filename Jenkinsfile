@@ -3,7 +3,9 @@ pipeline {
     docker {
       image 'guyzsarun/hls4ml:vivado'
     }
-
+  options {
+    timeout(time: 3, unit: 'HOURS')
+  }
   }
   stages {
     stage('qkeras-api-test') {
