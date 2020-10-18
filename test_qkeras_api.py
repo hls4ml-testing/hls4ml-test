@@ -1,12 +1,12 @@
-import pytest
-import random
 import string
+import random
+import pytest
 import numpy as np
-import hls4ml
 from qkeras import *
 from tensorflow.keras.layers import Input
 
-from utils import *
+import hls4ml
+from utils import _output_shape,_accuracy,_layer_number,_alpha,cleanup
 
 # ternary_tanh
 qactivation_list = ['quantized_relu', 'quantized_tanh', 'binary_tanh', 'quantized_bits']
@@ -15,9 +15,10 @@ qactivation_stochastic_bias = ['ternary', 'binary']
 quantized_bit_list = ['2', '3', '4', '5', '6', '7', '8']
 quantized_integer_list = ['0', '1']
 
+letters = string.ascii_lowercase
 
 # Acceptable accuracy error
-percent_error = 65
+error = 15
 
 @pytest.mark.parametrize('activation_int', quantized_integer_list)
 @pytest.mark.parametrize('activation_bit', quantized_bit_list)
@@ -40,10 +41,11 @@ def test_dense(activation_bit, activation_int):
     hls_pred=hls_model.predict(test_input)
 
     assert(_output_shape(model_pred,hls_pred))
-    assert(_accuracy(model_pred,hls_pred,percent_error))
+    assert(_accuracy(model_pred,hls_pred,error))
     assert(_layer_number(model,hls_model))
     assert(_alpha(model,hls_model))
 
+    cleanup()
 
 @pytest.mark.parametrize('activation_kernel', qactivation_stochastic_kernel)
 @pytest.mark.parametrize('activation_bias', qactivation_stochastic_bias)
@@ -62,9 +64,11 @@ def test_dense_stochastic(activation_kernel, activation_bias):
     hls_pred=hls_model.predict(test_input)
 
     assert(_output_shape(model_pred,hls_pred))
-    assert(_accuracy(model_pred,hls_pred,percent_error))
+    assert(_accuracy(model_pred,hls_pred,error))
     assert(_layer_number(model,hls_model))
     assert(_alpha(model,hls_model))
+
+    cleanup()
 
 
 @pytest.mark.parametrize('activation', qactivation_list)
@@ -83,7 +87,7 @@ def test_activation(activation):
     hls_pred=hls_model.predict(test_input)
 
     assert(_output_shape(model_pred,hls_pred))
-    assert(_accuracy(model_pred,hls_pred,percent_error))
+    assert(_accuracy(model_pred,hls_pred,error))
 
     if activation == 'quantized_bits':
         assert len(model.layers) == len(hls_model.get_layers())
@@ -95,6 +99,7 @@ def test_activation(activation):
             else activation
         )
 
+    cleanup()
 
 
 @pytest.mark.parametrize('activation_kernel', qactivation_stochastic_kernel)
@@ -127,3 +132,10 @@ def test_conv1d_stochastic(activation_kernel, activation_bias):
     assert(_layer_number(model,hls_model))
     assert(_alpha(model,hls_model))
 
+    cleanup()
+
+
+# NOTE : to be removed
+def generate_project_name():
+    project_name=''.join(random.choice(letters) for i in range(10))
+    return project_name
