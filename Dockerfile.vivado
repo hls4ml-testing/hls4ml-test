@@ -1,0 +1,10 @@
+FROM hls4ml:latest
+
+USER root
+
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+RUN apt-get update
+RUN apt-get install -y gcc-multilib g++-multilib && ln -s /usr/lib/x86_64-linux-gnu /usr/lib64
+RUN pip install pytest
+
+WORKDIR /hls4ml

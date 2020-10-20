@@ -28,7 +28,6 @@ qactivation_stochastic_bias = ['ternary', 'binary']
 quantized_bit_list = ['2', '3', '4', '5', '6', '7', '8']
 quantized_integer_list = ['0', '1']
 
-
 @pytest.mark.parametrize('activation_int', quantized_integer_list)
 @pytest.mark.parametrize('activation_bit', quantized_bit_list)
 def test_dense(activation_bit, activation_int):
