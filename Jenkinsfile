@@ -10,13 +10,13 @@ pipeline {
       parallel {
         stage('qkeras-api-test') {
           steps {
-            sh 'pytest test_qkeras_api.py'
+            sh './run-test test_qkeras_api.py'
           }
         }
 
         stage('qkeras-vivado-test') {
           steps {
-            sh 'pytest test_qkeras_vivado.py'
+            sh './run-test test_qkeras_vivado.py'
           }
         }
 
