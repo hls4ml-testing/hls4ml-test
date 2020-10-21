@@ -20,6 +20,18 @@ pipeline {
           }
         }
 
+        stage('keras-api-test') {
+          steps {
+            sh './run-test test_keras_api.py'
+          }
+        }
+
+        stage('keras-vivado-test') {
+          steps {
+            sh './run-test test_keras_vivado.py'
+          }
+        }
+
       }
     }
 
