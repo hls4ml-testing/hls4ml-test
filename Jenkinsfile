@@ -8,19 +8,22 @@ pipeline {
   stages {
     stage('qkeras-api-test') {
       parallel {
-        stage('qkeras-api-test') {
+        stage('python-api-test') {
           steps {
             sh './run-test test_qkeras_api.py'
           }
         }
 
-        stage('qkeras-vivado-test') {
+        stage('vivado-test') {
           steps {
             sh './run-test test_qkeras_vivado.py'
           }
         }
-
-        stage('keras-api-test') {
+      }
+      stage('keras-api-test'){
+        {
+          parallel{
+            stage('keras-api-test') {
           steps {
             sh './run-test test_keras_api.py'
           }
@@ -31,8 +34,8 @@ pipeline {
             sh './run-test test_keras_vivado.py'
           }
         }
-
-      }
+          }
+        }
     }
 
   }
